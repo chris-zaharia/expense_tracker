@@ -4,6 +4,7 @@ import 'package:expense_tracker/models/expense.dart';
 
 final formatter = DateFormat.yMd();
 
+
 class NewExpense extends StatefulWidget {
   const NewExpense({super.key});
 
@@ -25,6 +26,15 @@ class _NewExpenseState extends State<NewExpense> {
     _amountController.dispose();
     //Make sure to dispose of it
     super.dispose();
+  }
+
+  void _submitExpenseData(){
+    final enteredAmount = double.tryParse(_amountController.text);
+    final amountIsInvalid = enteredAmount==null || enteredAmount <= 0;
+    if (_titleController.text.trim().isEmpty || amountIsInvalid|| _selectedDate == null)
+    {
+      //show error
+    }
   }
 
   void _presentDatePicker() async {
@@ -108,6 +118,7 @@ class _NewExpenseState extends State<NewExpense> {
           ),
           Row(
             children: [
+              Spacer(),
               ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);

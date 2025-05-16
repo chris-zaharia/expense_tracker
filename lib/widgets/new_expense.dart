@@ -11,7 +11,6 @@ class NewExpense extends StatefulWidget {
   final void Function(Expense expense) onAddExpense;
   @override
   State<NewExpense> createState() {
-    // TODO: implement createState
     return _NewExpenseState();
   }
 }
@@ -32,53 +31,48 @@ class _NewExpenseState extends State<NewExpense> {
   void _submitExpenseData() {
     final enteredAmount = double.tryParse(_amountController.text);
     final isInvalidAmount = enteredAmount == null || enteredAmount <= 0;
-    //Check if title is empty
     if (_titleController.text.trim().isEmpty ||
         isInvalidAmount ||
         _selectedDate == null) {
-      if (Platform.isIOS) {
-        showCupertinoDialog(
+      if(Platform.isIOS){
+      showCupertinoDialog(
           context: context,
           builder: (ctx) => CupertinoAlertDialog(
-            title: const Text('Invalid Input!'),
-            content: const Text(
-                'Please make sure valid title, amount, date were entered!'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(ctx);
-                },
-                child: const Text('Okay'),
-              ),
-            ],
-          ),
-        );
+                title: const Text('Invalid Input!'),
+                content: const Text(
+                    'Please make sure valid title, amount, date were entered!'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(ctx);
+                    },
+                    child: const Text('Okay'),
+                  ),
+                ],
+              ),);
       }
-else{
-  showDialog(
+      else{
+        showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: const Text('Invalid Input!'),
-            content: const Text(
-                'Please make sure valid title, amount, date were entered!'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(ctx);
-                },
-                child: const Text('Okay'),
-              ),
-            ],
-          ),
-        );
-}
-      return;
+                title: const Text('Invalid Input!'),
+                content: const Text(
+                    'Please make sure valid title, amount, date were entered!'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(ctx);
+                    },
+                    child: const Text('Okay'),
+                  ),
+                ],
+              ),);
+      }
     }
-    //Do the stuff to save the expense
     widget.onAddExpense(
       Expense(
           title: _titleController.text,
-          amount: enteredAmount,
+          amount: enteredAmount!,
           date: _selectedDate!,
           category: _selectedCategory),
     );
@@ -148,21 +142,14 @@ else{
                 if (width >= 600)
                   Row(
                     children: [
-                      const Spacer(),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Cancel'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          // print(_titleController.text);
-                          // print(_amountController.text);
-                          _submitExpenseData();
-                        },
-                        child: const Text('Save Expense'),
-                      ),
+                      Text(
+                              _selectedDate == null
+                                  ? 'Selected Date'
+                                  : formatter.format(_selectedDate!),
+                            ),
+                            IconButton(
+                                onPressed: _presentDatePicker,
+                                icon: const Icon(Icons.calendar_month)),
                     ],
                   )
                 else
